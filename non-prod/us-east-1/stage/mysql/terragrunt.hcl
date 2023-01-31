@@ -9,7 +9,7 @@ locals {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "git::git@github.com:jamesshapiro/terragrunt-infrastructure-modules.git//mysql?ref=v0.0.4"
+  source = "git::git@github.com:jamesshapiro/terragrunt-infrastructure-modules.git//mysql?ref=v0.0.7"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -19,7 +19,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  name           = "mysql_${local.env}"
+  name           = "ddb_${local.env}"
   instance_class = "db.t2.micro"
 
   allocated_storage = 20

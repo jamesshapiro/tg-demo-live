@@ -19,7 +19,7 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  name          = "webserver-example-${local.env}"
+  name          = "sqs-${local.env}"
   instance_type = "t2.medium"
 
   min_size = 3
