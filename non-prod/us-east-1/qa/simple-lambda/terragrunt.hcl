@@ -19,13 +19,5 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  lambda_version_TODO = ""
-  # name          = "webserver-example-${local.env}"
-  # instance_type = "t2.micro"
-
-  # min_size = 2
-  # max_size = 2
-
-  # server_port = 8080
-  # elb_port    = 80
+  lambda_version = ""
 }
