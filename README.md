@@ -1,3 +1,17 @@
+1. create IAM user terragrunt-build-runner in build account
+2. create bucket in build account for tf-state
+3. create DDB table in build account w/ HashKey == LockID
+4. create IAM roles in subsidiary accounts
+5. aws configure on local account with build runner
+6. fix s3/dynamodb permissions so that only the build-runner has permission to change them
+
+# Updating a module
+
+7. make a change to module in terraform-infrastructure repo
+8. git tag -a "v0.0.8" -m "Add Lambda"
+9. git push --follow-tags
+10. change version in terraform-live repo
+
 [![Maintained by Gruntwork.io](https://img.shields.io/badge/maintained%20by-gruntwork.io-%235849a6.svg)](https://gruntwork.io/?ref=repo_terragrunt-infra-live-example)
 
 # Example infrastructure-live for Terragrunt
@@ -18,11 +32,7 @@ environment.
 Note: This code is solely for demonstration purposes. This is not production-ready code, so use at your own risk. If
 you are interested in battle-tested, production-ready Terraform code, check out [Gruntwork](http://www.gruntwork.io/).
 
-
-
-
 ## How do you deploy the infrastructure in this repo?
-
 
 ### Pre-requisites
 
@@ -37,7 +47,6 @@ you are interested in battle-tested, production-ready Terraform code, check out 
    mechanisms](https://www.terraform.io/docs/providers/aws/#authentication).
 1. Fill in your AWS Account ID's in `prod/account.hcl` and `non-prod/account.hcl`.
 
-
 ### Deploying a single module
 
 1. `cd` into the module's folder (e.g. `cd non-prod/us-east-1/qa/mysql`).
@@ -46,14 +55,12 @@ you are interested in battle-tested, production-ready Terraform code, check out 
 1. Run `terragrunt plan` to see the changes you're about to apply.
 1. If the plan looks good, run `terragrunt apply`.
 
-
 ### Deploying all modules in a region
 
 1. `cd` into the region folder (e.g. `cd non-prod/us-east-1`).
 1. Configure the password for the MySQL DB as an environment variable: `export TF_VAR_master_password=(...)`.
 1. Run `terragrunt plan-all` to see all the changes you're about to apply.
 1. If the plan looks good, run `terragrunt apply-all`.
-
 
 ### Testing the infrastructure after it's deployed
 
@@ -95,11 +102,6 @@ You can use the `endpoint` and `db_name` outputs with any MySQL client:
 mysql --host=terraform-1234567890.abcdefghijklmonp.us-east-1.rds.amazonaws.com:3306 --user=admin --password mysql_prod
 ```
 
-
-
-
-
-
 ## How is the code in this repo organized?
 
 The code in this repo uses the following folder hierarchy:
@@ -115,23 +117,23 @@ account
 
 Where:
 
-* **Account**: At the top level are each of your AWS accounts, such as `stage-account`, `prod-account`, `mgmt-account`,
+- **Account**: At the top level are each of your AWS accounts, such as `stage-account`, `prod-account`, `mgmt-account`,
   etc. If you have everything deployed in a single AWS account, there will just be a single folder at the root (e.g.
   `main-account`).
 
-* **Region**: Within each account, there will be one or more [AWS
+- **Region**: Within each account, there will be one or more [AWS
   regions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html), such as
   `us-east-1`, `eu-west-1`, and `ap-southeast-2`, where you've deployed resources. There may also be a `_global`
   folder that defines resources that are available across all the AWS regions in this account, such as IAM users,
   Route 53 hosted zones, and CloudTrail.
 
-* **Environment**: Within each region, there will be one or more "environments", such as `qa`, `stage`, etc. Typically,
+- **Environment**: Within each region, there will be one or more "environments", such as `qa`, `stage`, etc. Typically,
   an environment will correspond to a single [AWS Virtual Private Cloud (VPC)](https://aws.amazon.com/vpc/), which
   isolates that environment from everything else in that AWS account. There may also be a `_global` folder
   that defines resources that are available across all the environments in this AWS region, such as Route 53 A records,
   SNS topics, and ECR repos.
 
-* **Resource**: Within each environment, you deploy all the resources for that environment, such as EC2 Instances, Auto
+- **Resource**: Within each environment, you deploy all the resources for that environment, such as EC2 Instances, Auto
   Scaling Groups, ECS Clusters, Databases, Load Balancers, and so on. Note that the Terraform code for most of these
   resources lives in the [terragrunt-infrastructure-modules-example repo](https://github.com/gruntwork-io/terragrunt-infrastructure-modules-example).
 
