@@ -4,6 +4,34 @@
 4. create IAM roles in subsidiary accounts
 5. aws configure on local account with build runner
 6. fix s3/dynamodb permissions so that only the build-runner has permission to change them
+7. Modify bucket policies for lambda code / tf state to allow all necessary S3 actions
+
+Add this policy to roles:
+
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Sid": "AllowS3Access",
+"Effect": "Allow",
+"Action": [
+"s3:GetObject",
+"s3:ListBucket"
+],
+"Resource": [
+"arn:aws:s3:::athens-build-lambda-code",
+"arn:aws:s3:::athens-build-lambda-code/*",
+"arn:aws:s3:::athens-terragrunt-state-files",
+"arn:aws:s3:::athens-terragrunt-state-files/*"
+],
+"Condition": {
+"StringEquals": {
+"aws:SourceAccount": "117795818892"
+}
+}
+}
+]
+}
 
 # Updating a module
 

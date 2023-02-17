@@ -42,9 +42,11 @@ remote_state {
   backend = "s3"
   config = {
     encrypt        = true
+    #bucket         = "athens-terragrunt-state-files"
     bucket         = "athens-terragrunt-state-${local.account_name}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = local.aws_region
+    region         = "us-east-1"
+    #region         = local.aws_region
     dynamodb_table = "terraform-locks"
     role_arn = "arn:aws:iam::${local.account_id}:role/${local.role_to_assume}"
   }
