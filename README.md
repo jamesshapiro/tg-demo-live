@@ -19,10 +19,10 @@ Add this policy to roles:
 "s3:ListBucket"
 ],
 "Resource": [
-"arn:aws:s3:::athens-build-lambda-code",
-"arn:aws:s3:::athens-build-lambda-code/*",
-"arn:aws:s3:::athens-terragrunt-state-files",
-"arn:aws:s3:::athens-terragrunt-state-files/*"
+"arn:aws:s3:::tg-demo-build-lambda-code",
+"arn:aws:s3:::tg-demo-build-lambda-code/*",
+"arn:aws:s3:::tg-demo-terragrunt-state-files",
+"arn:aws:s3:::tg-demo-terragrunt-state-files/*"
 ],
 "Condition": {
 "StringEquals": {

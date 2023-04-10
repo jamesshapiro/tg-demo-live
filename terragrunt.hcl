@@ -42,8 +42,8 @@ remote_state {
   backend = "s3"
   config = {
     encrypt        = true
-    #bucket         = "athens-terragrunt-state-files"
-    bucket         = "athens-terragrunt-state-${local.account_name}"
+    #bucket         = "tg-demo-terragrunt-state-files"
+    bucket         = "tg-demo-terragrunt-state-${local.account_name}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     # Note: need to fix region to allow other regions to use the same bucket
     region         = "us-east-1"
