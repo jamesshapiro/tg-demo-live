@@ -2,6 +2,69 @@
 2. create bucket in build account for tf-state
 3. create DDB table in build account w/ HashKey == LockID
 4. create IAM roles in subsidiary accounts
+
+role-name: terragrunt-build
+
+Trust Policy:
+
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Effect": "Allow",
+"Principal": {
+"AWS": "arn:aws:iam::[build-acct-id]:user/terragrunt-build-runner"
+},
+"Action": "sts:AssumeRole",
+"Condition": {}
+}
+]
+}
+
+#======================================#
+{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Effect": "Allow",
+"Principal": {
+"AWS": "arn:aws:iam::018897537811:user/terragrunt-build-runner"
+},
+"Action": "sts:AssumeRole",
+"Condition": {}
+}
+]
+}
+#======================================#
+
+Permissions policies:
+
+- AdministratorAccess
+- {
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+  "Sid": "AllowS3Access",
+  "Effect": "Allow",
+  "Action": [
+  "s3:GetObject",
+  "s3:ListBucket"
+  ],
+  "Resource": [
+  "arn:aws:s3:::tg-demo-build-lambda-code",
+  "arn:aws:s3:::tg-demo-build-lambda-code/*",
+  "arn:aws:s3:::tg-demo-terragrunt-state",
+  "arn:aws:s3:::tg-demo-terragrunt-state/*"
+  ],
+  "Condition": {
+  "StringEquals": {
+  "aws:SourceAccount": "[build-acct-id]"
+  }
+  }
+  }
+  ]
+  }
+
 5. aws configure on local account with build runner
 6. fix s3/dynamodb permissions so that only the build-runner has permission to change them
 7. Modify bucket policies for lambda code / tf state to allow all necessary S3 actions
